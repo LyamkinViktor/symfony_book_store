@@ -1,0 +1,15 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}Book list{% endblock %}
+
+{% block body %}
+
+<h1>Book list</h1>
+
+    {% for book in books %}
+
+        <div><a href="{{ path('book_view', { bookName: book }) }}">{{ book }}</a></div>
+
+    {% endfor%}
+
+{% endblock %}

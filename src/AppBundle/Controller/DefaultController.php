@@ -12,11 +12,10 @@ class DefaultController extends Controller
     /**
      * @Route("/", name="homepage")
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        $book = 'php the right way';
 
-        return $this->render('default/index.html.twig', ['book'=> $book]);
+        return $this->render('@App/default/index.html.twig');
     }
 
     /**
@@ -24,6 +23,6 @@ class DefaultController extends Controller
      */
     public function feedbackAction()
     {
-        return new Response('<!doctype html><body>It works!</body></html5>');
+        return $this->render('@App/default/feedback.html.twig');
     }
 }
