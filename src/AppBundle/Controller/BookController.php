@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Books;
+use AppBundle\Entity\Category;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -15,23 +17,38 @@ class BookController extends Controller
      */
     public function indexAction()
     {
-        $books = [
-            1 =>'PHP the right way',
-            'Upgrading to PHP 7',
-            'PHP Best Practices'
-        ];
+        $books = $this
+            ->getDoctrine()
+            ->getRepository('AppBundle:Books')
+            ->findAll();
 
         return ['books' => $books];
     }
 
     /**
-     * @Route("/books/{bookName}", name="book_view", requirements={"id": "[0-9]+"})
+     * @Route("/books/{id}", name="book_view", requirements={"id": "[0-9]+"})
      * @Template("@App/book/show.html.twig")
-     * @param $bookName
+     * @param Books $book
      * @return array
      */
-    public function showAction($bookName)
+    public function showAction(Books $book)
     {
-        return ['bookName' => $bookName];
+        return ['book' => $book];
+    }
+
+    /**
+     * @Route("/category/{id}", name="books_by_category")
+     * @Template("@App/category/list_by_category.html.twig")
+     * @param Category $category
+     * @return array
+     */
+    public function listByCategoryAction(Category $category)
+    {
+        $books = $this
+            ->getDoctrine()
+            ->getRepository('AppBundle:Books')
+            ->findByCategory($category);
+
+        return ['books' => $books];
     }
 }

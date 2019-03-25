@@ -4,6 +4,15 @@
 
 {% block body %}
 
-    <h1>Book: {{ bookName }}</h1>
+    <h1>Book: {{ book.title }}</h1>
+
+    <div><strong>Author:</strong> {{ book.author }}</div>
+    <div><strong>Book genre:</strong> {{ book.category.name }}</div>
+    <div><strong>Price:</strong> {{ book.price }}</div>
+<hr>
+    <p><strong>Description:</strong>
+        <div>{{ book.description }}</div>
+    </p>
+
 
 {% endblock %}
