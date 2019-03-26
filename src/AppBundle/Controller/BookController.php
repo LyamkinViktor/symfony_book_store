@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 
-use AppBundle\Entity\Books;
+use AppBundle\Entity\Book;
 use AppBundle\Entity\Category;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -19,7 +19,7 @@ class BookController extends Controller
     {
         $books = $this
             ->getDoctrine()
-            ->getRepository('AppBundle:Books')
+            ->getRepository('AppBundle:Book')
             ->findAll();
 
         return ['books' => $books];
@@ -28,10 +28,10 @@ class BookController extends Controller
     /**
      * @Route("/books/{id}", name="book_view", requirements={"id": "[0-9]+"})
      * @Template("@App/book/show.html.twig")
-     * @param Books $book
+     * @param Book $book
      * @return array
      */
-    public function showAction(Books $book)
+    public function showAction(Book $book)
     {
         return ['book' => $book];
     }
@@ -46,7 +46,7 @@ class BookController extends Controller
     {
         $books = $this
             ->getDoctrine()
-            ->getRepository('AppBundle:Books')
+            ->getRepository('AppBundle:Book')
             ->findByCategory($category);
 
         return ['books' => $books];

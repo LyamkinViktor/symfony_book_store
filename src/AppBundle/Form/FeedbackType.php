@@ -35,7 +35,7 @@ class FeedbackType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_feedback';
+        return 'appBundle_feedback';
     }
 
 

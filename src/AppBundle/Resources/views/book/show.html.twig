@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    <h1>Book: {{ book.title }}</h1>
+    <h1>{{ book.title }}</h1>
 
     <div><strong>Author:</strong> {{ book.author }}</div>
     <div><strong>Book genre:</strong> {{ book.category.name }}</div>
@@ -14,5 +14,8 @@
         <div>{{ book.description }}</div>
     </p>
 
+    <p>
+        <img src="{{ asset('bundles/app/images/' ~ book.image) }}" alt="{{ book.image }}" />
+    </p>
 
 {% endblock %}

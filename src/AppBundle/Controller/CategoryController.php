@@ -27,11 +27,11 @@ class CategoryController extends Controller
     /**
      * @Route("/categories/{id}", name="category_view")
      * @Template("@App/book/show.html.twig")
-     * @param Books $book
+     * @param Book $book
      * @return array
      */
     /*
-    public function showAction(Books $book)
+    public function showAction(Book $book)
     {
         dump($book);
 

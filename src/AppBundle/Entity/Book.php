@@ -3,14 +3,16 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Books
+ * Class Book
  *
  * @ORM\Table(name="books")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\BooksRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\BookRepository")
  */
-class Books
+class Book
 {
     /**
      * @var int
@@ -24,14 +26,14 @@ class Books
     /**
      * @var string
      *
-     * @ORM\Column(name="author", type="string", length=255)
+     * @ORM\Column(name="author", type="string", length=500)
      */
     private $author;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
+     * @ORM\Column(name="title", type="string", length=300)
      */
     private $title;
 
@@ -55,6 +57,17 @@ class Books
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category")
      */
     private $category;
+
+    /**
+     * @ORM\Column(name="image", type="string", length=500, nullable=true)
+     * @Assert\Image(
+     *      minWidth = 200,
+     *      maxWidth = 400,
+     *      minHeight = 200,
+     *      maxHeight = 400
+     * )
+     */
+    private $image;
 
 
     /**
@@ -89,7 +102,7 @@ class Books
      *
      * @param string $title
      *
-     * @return Books
+     * @return Book
      */
     public function setTitle($title)
     {
@@ -113,7 +126,7 @@ class Books
      *
      * @param string $price
      *
-     * @return Books
+     * @return Book
      */
     public function setPrice($price)
     {
@@ -137,7 +150,7 @@ class Books
      *
      * @param string $description
      *
-     * @return Books
+     * @return Book
      */
     public function setDescription($description)
     {
@@ -161,7 +174,7 @@ class Books
      *
      * @param string $category
      *
-     * @return Books
+     * @return Book
      */
     public function setCategory($category)
     {
@@ -178,6 +191,19 @@ class Books
     public function getCategory()
     {
         return $this->category;
+    }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param File|null $file
+     */
+    public function setImage(File $file = null)
+    {
+        $this->image = $file;
     }
 }
 

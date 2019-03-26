@@ -4,7 +4,13 @@
    <h1>Feedback page</h1>
 
    <div>
-      {{ form(feedback_form) }}
+      {{ form_start(feedback_form) }}
+
+         {{ form_row(feedback_form.name) }}
+         {{ form_row(feedback_form.email) }}
+         {{ form_row(feedback_form.message) }}
+
+      {{ form_end(feedback_form) }}
    </div>
 
 {% endblock %}
