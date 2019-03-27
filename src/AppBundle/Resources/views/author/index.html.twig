@@ -1,0 +1,17 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}
+    Authors list
+{% endblock %}
+
+{% block body %}
+<div><h1>Authors:</h1></div>
+    <p>
+        {% for author in authors %}
+            <div><a href="{{ path('books_by_author', { id: author.id }) }}">{{ author.name }}</a></div>
+        {% endfor %}
+    </p>
+{% endblock %}
+
+
+

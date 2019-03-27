@@ -26,7 +26,7 @@ class Book
     /**
      * @var string
      *
-     * @ORM\Column(name="author", type="string", length=500)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Author")
      */
     private $author;
 

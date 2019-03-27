@@ -1,0 +1,21 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}Book list by author{% endblock %}
+
+{% block body %}
+
+    <h1>Book list by author</h1>
+
+    {% for book in books %}
+
+        <a href="{{ path('book_view', { id: book.id }) }}">
+            <figure style="float: left; margin-right: 60px; text-align: center">
+                <p><img src="{{ asset('bundles/app/images/' ~ book.image) }}" alt="{{ book.image }}" style="width: 200px;"></p>
+                <figcaption>{{ book.title }}</figcaption>
+            </figure>
+        </a>
+
+    {% endfor%}
+
+{% endblock %}
+

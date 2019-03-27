@@ -2,6 +2,7 @@
 
 namespace AppBundle\Repository;
 
+use AppBundle\Entity\Author;
 use AppBundle\Entity\Category;
 
 /**
@@ -19,6 +20,17 @@ class BookRepository extends \Doctrine\ORM\EntityRepository
             ->createQueryBuilder('books')
             ->where('books.category = :category')
             ->setParameter(':category', $category)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function findByAuthor(Author $author)
+    {
+        return $this
+            ->createQueryBuilder('books')
+            ->where('books.author = :author')
+            ->setParameter(':author', $author)
             ->getQuery()
             ->getResult()
             ;

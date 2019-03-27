@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Author;
 use AppBundle\Entity\Book;
 use AppBundle\Entity\Category;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -48,6 +49,22 @@ class BookController extends Controller
             ->getDoctrine()
             ->getRepository('AppBundle:Book')
             ->findByCategory($category);
+
+        return ['books' => $books];
+    }
+
+    /**
+     * @Route("/author/{id}", name="books_by_author")
+     * @Template("@App/author/list_by_author.html.twig")
+     * @param Author $author
+     * @return array
+     */
+    public function listByAuthorAction(Author $author)
+    {
+        $books = $this
+            ->getDoctrine()
+            ->getRepository('AppBundle:Book')
+            ->findByAuthor($author);
 
         return ['books' => $books];
     }
