@@ -4,3 +4,6 @@ parameters:
     #parameter_name: value
 
 services:
+  AppBundle\Controller\RegistrationController:
+    autowire: true # or define your controller constructor and configure its arguments explicitly
+    tags: ['controller.service_arguments']

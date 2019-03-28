@@ -23,12 +23,14 @@
 
 {% block body %}
 
-    {{ form_start(form) }}
-        {{ form_row(form.email) }}
-        {{ form_row(form.plainPassword.first) }}
-        {{ form_row(form.plainPassword.second) }}
+    <p>
+        {{ form_start(form) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.plainPassword.first) }}
+            {{ form_row(form.plainPassword.second) }}
 
-        <button type="submit" class="btn btn-success">Login</button>
-    {{ form_end(form) }}
+            <button type="submit" class="btn btn-success">Login</button>
+        {{ form_end(form) }}
+    </p>
 
 {% endblock %}

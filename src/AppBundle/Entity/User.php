@@ -33,11 +33,19 @@ class User implements UserInterface
     private $plainPassword;
 
 
+
     public function getUsername()
     {
         return $this->email;
     }
 
+
+
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
 
     public function getRoles()
     {

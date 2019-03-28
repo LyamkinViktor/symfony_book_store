@@ -14,28 +14,24 @@ class RegistrationController extends Controller
 {
     /**
      * @Route("/register", name="user_registration")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        //Построение формы
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
-
-        //Обработка отправки, пройдет только в POST
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
 
-            //Шифрование пароля, также можно сделать через слушатель Doctrine
+        if ($form->isSubmitted() && $form->isValid()) {
             $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);
 
-            //Сохранение пользователя
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
-
-            // ... сделайте любую другую работу - вроде отправки письма и др
-            // может, установите "флеш" сообщение об успешном выполнении для пользователя
 
             return $this->redirectToRoute('homepage');
         }
