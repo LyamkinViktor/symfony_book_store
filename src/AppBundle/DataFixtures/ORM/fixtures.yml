@@ -1,5 +1,0 @@
-AppBundle\Entity\User:
-    user_{1..10}:
-        email: user+<current()>@gmail.com
-        plainPassword: iliketurtles
-        roles: ['ROLE_ADMIN']
