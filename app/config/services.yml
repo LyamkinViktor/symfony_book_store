@@ -7,3 +7,8 @@ services:
   AppBundle\Controller\RegistrationController:
     autowire: true # or define your controller constructor and configure its arguments explicitly
     tags: ['controller.service_arguments']
+
+  app.security.login_form_authenticator:
+    class: AppBundle\Security\LoginFormAuthenticator
+    autowire: true
+    tags: ['controller.service_arguments']

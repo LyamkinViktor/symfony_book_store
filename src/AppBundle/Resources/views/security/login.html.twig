@@ -23,9 +23,21 @@
 
 {% block body %}
 
-                {{ form_start() }}
+    <div>
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+    </div>
 
-                    <button type="submit" class="btn btn-success">Login</button>
-                {{ form_end }}
+    <p>
+        {{ form_start(form) }}
+            {{ form_row(form._username) }}
+            {{ form_row(form._password) }}
+
+            <button type="submit" class="btn btn-success">Login</button>
+        {{ form_end(form) }}
+    </p>
 
 {% endblock %}
