@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -69,6 +70,15 @@ class Book
      */
     private $image;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Feedback", mappedBy="book")
+     */
+    private $feedback;
+
+    public function __construct()
+    {
+        $this->feedback = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -205,5 +215,22 @@ class Book
     {
         $this->image = $file;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFeedback()
+    {
+        return $this->feedback;
+    }
+
+    /**
+     * @param mixed $feedback
+     */
+    public function setFeedback($feedback): void
+    {
+        $this->feedback = $feedback;
+    }
+
 }
 

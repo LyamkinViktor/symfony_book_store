@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -14,7 +15,6 @@ class Feedback
 {
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -43,18 +43,30 @@ class Feedback
     private $message;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="created", type="datetime")
      */
     private $created;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Book", inversedBy="feedback")
+     * @ORM\JoinColumn(name="book_id", referencedColumnName="id")
+     */
+    private $book;
+
+
+
+
     public function __construct()
     {
         try {
-            $this->created = new \DateTime();
+            $this->created = new DateTime();
         } catch (\Exception $e) {
+
         }
+
+        //$this->book = $_REQUEST[''];
     }
 
     /**
@@ -142,7 +154,7 @@ class Feedback
     /**
      * Set created
      *
-     * @param \DateTime $created
+     * @param DateTime $created
      *
      * @return Feedback
      */
@@ -156,11 +168,28 @@ class Feedback
     /**
      * Get created
      *
-     * @return \DateTime
+     * @return DateTime
      */
     public function getCreated()
     {
         return $this->created;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getBook()
+    {
+        return $this->book;
+    }
+
+    /**
+     * @param Book $book
+     */
+    public function setBook(Book $book): void
+    {
+        $this->book = $book;
+    }
+
 }
 

@@ -6,6 +6,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Author;
 use AppBundle\Entity\Book;
 use AppBundle\Entity\Category;
+use AppBundle\Entity\Feedback;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -34,7 +35,9 @@ class BookController extends Controller
      */
     public function showAction(Book $book)
     {
-        return ['book' => $book];
+        return [
+            'book' => $book,
+        ];
     }
 
     /**
@@ -67,5 +70,15 @@ class BookController extends Controller
             ->findByAuthor($author);
 
         return ['books' => $books];
+    }
+
+
+    /**
+     * @Route("/add", name="add_book")
+     * @Template("@App/book/addBook.html.twig")
+     */
+    public function addBookAction()
+    {
+
     }
 }

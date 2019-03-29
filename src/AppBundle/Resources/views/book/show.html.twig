@@ -18,4 +18,41 @@
         <img src="{{ asset('bundles/app/images/' ~ book.image) }}" alt="{{ book.image }}" />
     </p>
 
+<hr>
+
+    <div>
+        {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('feedback', { id: book.id }) }}">
+                <button class="btn btn-default" type="button">Add a review about the book</button>
+            </a>
+        {% endif %}
+    </div>
+
+    <h3>Feedback:</h3>
+
+    <p>
+        {%  for feedback in book.feedback %}
+
+            <div>
+                <strong>Sender:</strong>
+                {{ feedback.name }}
+            </div>
+            <div>
+                <strong>Sender's mail:</strong>
+                {{ feedback.email }}
+            </div>
+            <div>
+                <strong>Feedback:</strong>
+                <p>{{ feedback.message }}</p>
+            </div>
+            <div>
+                <strong>Date: </strong>
+                {{ feedback.created|date("d.m.Y") }}
+            </div>
+            <hr>
+
+        {% endfor %}
+    </p>
+
+
 {% endblock %}
