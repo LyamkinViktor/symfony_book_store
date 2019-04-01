@@ -17,7 +17,6 @@ class FeedbackType extends AbstractType
             ->add('name')
             ->add('email')
             ->add('message')
-            ->add('submit', 'Symfony\Component\Form\Extension\Core\Type\SubmitType')
         ;
     }
 

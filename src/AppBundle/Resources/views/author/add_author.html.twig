@@ -1,0 +1,19 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}Adding author{% endblock %}
+
+
+
+{% block body %}
+
+    <h1>Adding author</h1>
+
+    {{ form_start(form) }}
+
+    {{ form_row(form.name) }}
+
+    <button type="submit" class="btn btn-success" formnovalidate>Add author</button>
+    {{ form_end(form) }}
+
+
+{% endblock %}

@@ -4,7 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="books")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\BookRepository")
+ * @UniqueEntity(fields={"title"}, message="book already exists!")
  */
 class Book
 {
@@ -26,21 +27,21 @@ class Book
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="fill this field")
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Author")
      */
     private $author;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="title can not be empty!")
      * @ORM\Column(name="title", type="string", length=300)
      */
     private $title;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="fill this field")
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2)
      */
     private $price;
@@ -54,19 +55,16 @@ class Book
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="fill this field")
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category")
      */
     private $category;
 
     /**
      * @ORM\Column(name="image", type="string", length=500, nullable=true)
-     * @Assert\Image(
-     *      minWidth = 200,
-     *      maxWidth = 400,
-     *      minHeight = 200,
-     *      maxHeight = 400
-     * )
+     *
+     * @Assert\NotBlank(message="upload the image!")
+     * @Assert\File(mimeTypes={ "application/img", "application/png", "application/jpg", "image/png" })
      */
     private $image;
 
@@ -208,10 +206,7 @@ class Book
         return $this->image;
     }
 
-    /**
-     * @param File|null $file
-     */
-    public function setImage(File $file = null)
+    public function setImage($file = null)
     {
         $this->image = $file;
     }

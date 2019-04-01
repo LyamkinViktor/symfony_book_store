@@ -2,9 +2,16 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Author;
+use AppBundle\Entity\Category;
+use AppBundle\Form\AuthorType;
+use AppBundle\Form\CategoryType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
 {
@@ -22,20 +29,32 @@ class CategoryController extends Controller
         return ['categories' => $categories];
     }
 
-
-    /*
     /**
-     * @Route("/categories/{id}", name="category_view")
-     * @Template("@App/book/show.html.twig")
-     * @param Book $book
-     * @return array
+     * @Route("/addCategory", name="add_category")
+     * @Template("@App/category/add_category.html.twig")
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
-    /*
-    public function showAction(Book $book)
+    public function addCategoryAction(Request $request)
     {
-        dump($book);
+        $category = new Category();
 
-        return ['book' => $book];
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($category);
+            $entityManager->flush();
+
+            return $this->redirect($this->generateUrl('category_list'));
+        }
+
+        return $this->render('@App/category/add_category.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
-    */
+
 }

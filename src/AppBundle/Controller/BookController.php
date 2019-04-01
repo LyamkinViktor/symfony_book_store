@@ -6,10 +6,15 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Author;
 use AppBundle\Entity\Book;
 use AppBundle\Entity\Category;
-use AppBundle\Entity\Feedback;
+use AppBundle\Form\BookType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Response;
 
 class BookController extends Controller
 {
@@ -74,11 +79,55 @@ class BookController extends Controller
 
 
     /**
-     * @Route("/add", name="add_book")
-     * @Template("@App/book/addBook.html.twig")
+     * @Route("/addBook", name="add_book")
+     * @Template("@App/book/add_book.html.twig")
+     * @param Request $request
+     * @return RedirectResponse|Response
+     * @var UploadedFile
      */
-    public function addBookAction()
+    public function addBookAction(Request $request)
     {
+        $book = new Book();
 
+        $form = $this->createForm(BookType::class, $book);
+        $form->handleRequest($request);
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $file */
+            $file = $book->getImage();
+
+            $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
+
+            try {
+                $file->move(
+                    $this->getParameter('images_directory'),
+                    $fileName
+                );
+            } catch (FileException $e) {
+            }
+
+            $book->setImage($fileName);
+
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($book);
+            $entityManager->flush();
+
+            return $this->redirect($this->generateUrl('book_list'));
+        }
+
+        return $this->render('@App/book/add_book.html.twig', array(
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
+     * @return string
+     */
+    private function generateUniqueFileName()
+    {
+        return md5(uniqid());
     }
 }

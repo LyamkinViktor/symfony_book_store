@@ -1,0 +1,25 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block title %}Adding book{% endblock %}
+
+
+
+{% block body %}
+
+    <h1>Adding book</h1>
+
+    {{ form_start(form) }}
+
+        {{ form_row(form.author) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.price) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.category) }}
+        {{ form_row(form.image) }}
+
+    <button type="submit" class="btn btn-success" formnovalidate>Add book</button>
+
+    {{ form_end(form) }}
+
+
+{% endblock %}

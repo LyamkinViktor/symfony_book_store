@@ -2,13 +2,9 @@
 
 namespace AppBundle\Controller;
 
-
-use AppBundle\Entity\User;
 use AppBundle\Form\LoginForm;
-use AppBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class SecurityController extends Controller
 {
@@ -31,9 +27,10 @@ class SecurityController extends Controller
             '@App/security/login.html.twig',
             array(
                 'form' => $form->createView(),
-                'error' => $error,
+                'error' => $error
             )
         );
+
     }
 
     /**

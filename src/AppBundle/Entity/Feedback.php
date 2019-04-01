@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Feedback
@@ -23,28 +24,29 @@ class Feedback
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="fill this field")
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="fill this field")
+     * @Assert\Email()
      * @ORM\Column(name="email", type="string", length=255)
      */
     private $email;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank(message="fill this field")
      * @ORM\Column(name="message", type="text")
      */
     private $message;
 
     /**
      * @var DateTime
-     *
+     * @Assert\DateTime()
      * @ORM\Column(name="created", type="datetime")
      */
     private $created;

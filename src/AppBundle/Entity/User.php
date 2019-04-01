@@ -3,12 +3,15 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
+ * @UniqueEntity(fields={"email"}, message="user already exists!")
  */
 class User implements UserInterface
 {
@@ -21,11 +24,14 @@ class User implements UserInterface
     private $id;
 
     /**
+     * @Assert\NotBlank(message="fill this field")
+     * @Assert\Email()
      * @ORM\Column(type="string", unique=true)
      */
     private $email;
 
     /**
+     * @Assert\NotBlank(message="fill this field")
      * @ORM\Column(type="string")
      */
     private $password;
@@ -63,12 +69,6 @@ class User implements UserInterface
     }
 
 
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-
     public function getSalt()
     {
     }
@@ -88,6 +88,11 @@ class User implements UserInterface
     public function setPassword($password)
     {
         $this->password = $password;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
     }
 
 
