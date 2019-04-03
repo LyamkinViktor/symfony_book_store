@@ -8,12 +8,14 @@
 
     {% for book in books %}
 
-        <a href="{{ path('book_view', { id: book.id }) }}">
-            <figure style="float: left; margin-right: 60px; text-align: center">
-                <p><img src="{{ asset('bundles/app/images/' ~ book.image) }}" alt="{{ book.image }}" style="width: 200px;"></p>
-                <figcaption>{{ book.title }}</figcaption>
-            </figure>
-        </a>
+        <div class="col-md-4">
+            <a href="{{ path('book_view', { id: book.id }) }}">
+                <img src="{{ asset('bundles/app/images/' ~ book.image) }}"  alt="{{ book.image }}"
+                     class="img-thumbnail" style="height: 250px; width: 180px;">
+            </a>
+            <div>{{ book.title }}</div>
+
+        </div>
 
     {% endfor%}
 

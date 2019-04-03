@@ -63,3 +63,6 @@ doctrine:
 sensio_framework_extra:
    router:
         annotations: false
+
+api_platform:
+    title: 'specific name'

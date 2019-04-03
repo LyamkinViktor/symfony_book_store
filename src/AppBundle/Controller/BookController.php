@@ -105,10 +105,12 @@ class BookController extends Controller
                     $this->getParameter('images_directory'),
                     $fileName
                 );
-            } catch (FileException $e) {
-            }
+                $book->setImage($fileName);
 
-            $book->setImage($fileName);
+            } catch (FileException $e) {
+
+                $book->setImage(null);
+            }
 
 
             $entityManager = $this->getDoctrine()->getManager();

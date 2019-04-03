@@ -2,13 +2,14 @@
 
 namespace AppBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Author
- *
+ * @ApiResource()
  * @ORM\Table(name="author")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AuthorRepository")
  * @UniqueEntity(fields={"name"}, message="author already exists!")

@@ -2,23 +2,24 @@
 
 {% block title %}Book list{% endblock %}
 
+
 {% block body %}
 
 <h1>Book list</h1>
 
     {% for book in books %}
 
-        <div style="width: 1%; display: table; float: left; margin: 20px 20px 40px ;">
+        <div class="col-md-4">
             <a href="{{ path('book_view', { id: book.id }) }}">
-                <img src="{{ asset('bundles/app/images/' ~ book.image) }}"  alt="{{ book.image }}"
-                class="rounded mx-auto d-block" style="height: 350px; width: 250px; margin: 20px">
+            <img src="{{ asset('bundles/app/images/' ~ book.image) }}"  alt="{{ book.image }}"
+                 class="img-thumbnail" style="height: 250px; width: 180px;">
             </a>
-            <span style="height: auto; overflow: hidden">{{ book.title }}</span>
+            <div>{{ book.title }}</div>
+
         </div>
-
-
-
 
     {% endfor%}
 
+
 {% endblock %}
+
