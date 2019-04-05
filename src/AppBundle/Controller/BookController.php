@@ -120,9 +120,9 @@ class BookController extends Controller
             return $this->redirect($this->generateUrl('book_list'));
         }
 
-        return $this->render('@App/book/add_book.html.twig', array(
+        return $this->render('@App/book/add_book.html.twig', [
             'form' => $form->createView(),
-        ));
+        ]);
     }
 
     /**

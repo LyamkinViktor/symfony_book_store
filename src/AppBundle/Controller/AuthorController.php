@@ -56,4 +56,12 @@ class AuthorController extends Controller
         ));
     }
 
+    /*
+     *
+     * public function api()
+        {
+            return new Response(sprintf('Logged in as %s', $this->getUser()->getUsername()));
+        }
+     */
+
 }

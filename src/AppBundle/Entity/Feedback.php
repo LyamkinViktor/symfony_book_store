@@ -2,6 +2,8 @@
 
 namespace AppBundle\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -9,11 +11,27 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Feedback
  *
+ * @ApiResource(
+ *     attributes={
+ *     "access_control"="is_granted('ROLE_USER')"
+ *      },
+ *
+ *     collectionOperations={
+ *         "get",
+ *         "post"={"access_control"="is_granted('ROLE_ADMIN')"}
+ *     },
+ *     itemOperations={
+ *         "get"={"access_control"="is_granted('ROLE_USER')"},
+ *         "delete"={"access_control"="is_granted('ROLE_USER')"},
+ *         "put"={"access_control"="is_granted('ROLE_USER')"}
+ *     }
+ * )
  * @ORM\Table(name="feedback")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\FeedbackRepository")
  */
 class Feedback
 {
+
     /**
      * @var int
      * @ORM\Column(name="id", type="integer")
@@ -30,6 +48,14 @@ class Feedback
     private $name;
 
     /**
+     * @ApiProperty(
+     *     attributes={
+     *         "swagger_context"={
+     *             "type"="email",
+     *             "example"="someone@gmail.com"
+     *             }
+     *     }
+     * )
      * @var string
      * @Assert\NotBlank(message="fill this field")
      * @Assert\Email()
@@ -52,6 +78,14 @@ class Feedback
     private $created;
 
     /**
+     * @ApiProperty(
+     *     attributes={
+     *         "swagger_context"={
+     *             "type"="string",
+     *             "example"="/api/books/1"
+     *             }
+     *         }
+     * )
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Book", inversedBy="feedback")
      * @ORM\JoinColumn(name="book_id", referencedColumnName="id")
      */
@@ -67,8 +101,6 @@ class Feedback
         } catch (\Exception $e) {
 
         }
-
-        //$this->book = $_REQUEST[''];
     }
 
     /**

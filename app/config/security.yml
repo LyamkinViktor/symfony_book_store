@@ -31,6 +31,10 @@ security:
             #form_login: ~
 
     access_control:
-        - { path: ^/feedback, roles: ROLE_USER }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/, roles: ROLE_USER }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/subscription, roles: ROLE_USER }
+        - { path: ^/feedback, roles: ROLE_USER }

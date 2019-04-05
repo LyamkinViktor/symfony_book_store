@@ -10,16 +10,30 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class Book
- * @ApiResource()
+ * @ApiResource(
+ *      attributes={
+ *     "access_control"="is_granted('ROLE_USER')"
+ *      },
+ *
+ *     collectionOperations={
+ *         "get",
+ *         "post"={"access_control"="is_granted('ROLE_ADMIN')"}
+ *     },
+ *     itemOperations={
+ *         "get"={"access_control"="is_granted('ROLE_USER')"},
+ *         "delete"={"access_control"="is_granted('ROLE_USER')"},
+ *         "put"={"access_control"="is_granted('ROLE_USER')"}
+ *     }
+ * )
  * @ORM\Table(name="books")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\BookRepository")
  * @UniqueEntity(fields={"title"}, message="book already exists!")
  */
 class Book
 {
+
     /**
      * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
