@@ -8,13 +8,14 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/3.3/examples/starter-template/">
-
     <title>{% block title %}Welcome!{% endblock %}</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="{{ asset('bundles/app/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('bundles/app/css/style.css') }}" rel="stylesheet">
+    {% block styles %}
+        <link rel="canonical" href="https://getbootstrap.com/docs/3.3/examples/starter-template/">
+        <!-- Bootstrap core CSS -->
+        <link href="{{ asset('bundles/app/css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/app/css/style.css') }}" rel="stylesheet">
+    {% endblock %}
 
 </head>
 
@@ -36,7 +37,7 @@
                     <li><a href="{{ path('category_list') }}">Categories</a></li>
                     <li><a href="{{ path('author_list') }}">Authors</a></li>
                     <li><a href="{{ path('book_list') }}">Books</a></li>
-                    <li><a href="{{ path('subscribe') }}">Subscribe</a></li>
+                    <li><a href="{{ path('payment') }}">Payment</a></li>
 
                     {% if is_granted('ROLE_ADMIN') %}
                     <li class="dropdown">
@@ -45,6 +46,9 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ path('transactions') }}">Transactions</a>
+                            </li>
                             <li>
                                 <a href="{{ path('add_book') }}">Add Book</a>
                             </li>
@@ -82,10 +86,14 @@
 
     </div>
 
+{% block javascripts %}
 
-<script src="{{ asset('bundles/app/js/jquery.min.js') }}"></script>
-<script src="{{ asset('bundles/app/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('bundles/app/js/popper.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/popper.min.js') }}"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+
+{% endblock %}
 
 </body>
 

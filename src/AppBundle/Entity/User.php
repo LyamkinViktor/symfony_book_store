@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  * @ORM\Table(name="user")
  * @UniqueEntity(fields={"email"}, message="user already exists!")
  */
@@ -17,6 +17,7 @@ class User implements UserInterface
 {
 
     /**
+     *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
@@ -27,6 +28,7 @@ class User implements UserInterface
      * @Assert\NotBlank(message="fill this field")
      * @Assert\Email()
      * @ORM\Column(type="string", unique=true)
+     *
      */
     private $email;
 
@@ -37,6 +39,7 @@ class User implements UserInterface
     private $password;
 
     private $plainPassword;
+
 
     /**
      * @ORM\Column(type="json")
@@ -115,5 +118,10 @@ class User implements UserInterface
         $this->roles = $roles;
     }
 
+
+    public function getId()
+    {
+        return $this->id;
+    }
 
 }

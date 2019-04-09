@@ -51,17 +51,10 @@ class AuthorController extends Controller
             return $this->redirect($this->generateUrl('author_list'));
         }
 
-        return $this->render('@App/author/add_author.html.twig', array(
+        return $this->render('@App/author/add_author.html.twig', [
             'form' => $form->createView(),
-        ));
+        ]);
     }
 
-    /*
-     *
-     * public function api()
-        {
-            return new Response(sprintf('Logged in as %s', $this->getUser()->getUsername()));
-        }
-     */
 
 }
