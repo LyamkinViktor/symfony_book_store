@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -29,7 +30,7 @@ class Transaction
 
     /**
      *
-     * @ORM\Column(type="string", name="customerId")
+     * @ORM\Column(type="string", name="customer_id")
      */
     private $customerId;
 
@@ -68,11 +69,18 @@ class Transaction
      */
     private $createdAt;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="current_period_end", type="string")
+     */
+    private $currentPeriodEnd;
+
     public function __construct()
     {
         try {
             $this->createdAt = new DateTime();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
         }
     }
@@ -218,22 +226,6 @@ class Transaction
     }
 
     /**
-     * @return mixed
-     */
-    public function getCustomerId()
-    {
-        return $this->customerId;
-    }
-
-    /**
-     * @param mixed $customerId
-     */
-    public function setCustomerId($customerId): void
-    {
-        $this->customerId = $customerId;
-    }
-
-    /**
      * @param string $id
      */
     public function setId(string $id)
@@ -247,5 +239,37 @@ class Transaction
     public function setUser(User $user): void
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCurrentPeriodEnd(): string
+    {
+        return $this->currentPeriodEnd;
+    }
+
+    /**
+     * @param string $currentPeriodEnd
+     */
+    public function setCurrentPeriodEnd(string $currentPeriodEnd): void
+    {
+        $this->currentPeriodEnd = $currentPeriodEnd;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCustomerId()
+    {
+        return $this->customerId;
+    }
+
+    /**
+     * @param mixed $customerId
+     */
+    public function setCustomerId($customerId): void
+    {
+        $this->customerId = $customerId;
     }
 }

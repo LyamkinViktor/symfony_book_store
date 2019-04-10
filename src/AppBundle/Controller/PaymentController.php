@@ -5,23 +5,23 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\Transaction;
-use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Stripe\Charge;
 use Stripe\Customer;
 use Stripe\Stripe;
+use Stripe\Subscription;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class PaymentController extends Controller
 {
     /**
-     * @Route("/payment", name="payment")
+     * @Route("/payment/", name="payment")
      */
     public function indexAction()
     {
         $lastUsername = $this->get('security.authentication_utils')->getLastUsername();
-
 
         if (!empty($lastUsername)) {
             $username = $lastUsername;
@@ -35,56 +35,66 @@ class PaymentController extends Controller
     }
 
     /**
-     * @Route("payment/charge/{username}", name="charge")
+     * @Route("payment/charge/{username}&{pid}", name="charge")
+     * @param Request $request
      * @param $username
+     * @param $pid
      * @return RedirectResponse
      */
-    public function chargeAction($username)
+    public function chargeAction(Request $request, $username, $pid)
     {
+        if (empty($request->request->get('stripeToken'))) {
+            return $this->redirectToRoute('payment');
+        } else {
+            $token = $request->request->get('stripeToken');
+        }
 
-        Stripe::setApiKey('sk_test_2kKmRAbpAQf5q60aaNomaDu000Y2RcIDSd');
-
-        //Sanitize POST array
-        $POST = filter_var_array($_POST, FILTER_SANITIZE_STRING);
-
-        /*
-        $first_name = $POST['first_name'];
-        $last_name = $POST['last_name'];
-        $email = $POST['email'];
-        */
-
-        $email = $username;
-        $token = $POST['stripeToken'];
-
+        //Set secret key
+        Stripe::setApiKey($this->getParameter('stripe_secret_key'));
 
 
         //Create Customer in stripe
-
+        /** @var Customer $customer */
         $customer = Customer::create([
-            'email' => $email,
+            'email' => $username,
             'source' => $token,
         ]);
 
+        $plans = [
+            'month' => 'Subscription_month',
+            'year' => 'Subscription_year'
+        ];
 
-        //Charge Customer
-        $charge = Charge::create([
-            'amount' => 4200,
-            'currency' => 'usd',
-            'description' => 'Subscription',
-            'customer' => $customer->id,
+        //Create Subscription
+        /** @var Subscription $subscription */
+        $subscription = Subscription::create([
+            "customer" => $customer->id,
+            "items" => [
+                [
+                    "plan" => $plans[$pid],
+                ],
+            ]
         ]);
 
+        // Plan of subscription
+        $plan = $subscription->plan;
+
+        //convert UNIX timestamps to date strings
+        $currentPeriodEnd = gmdate("Y-m-d | H:i:s", $subscription->current_period_end);
 
         // Instantiate Transaction
         $transaction = new Transaction();
 
+        dump($plan);
+
         // Add transaction to Db
-        $transaction->setId($charge->id);
-        $transaction->setProduct($charge->description);
-        $transaction->setAmount($charge->amount);
-        $transaction->setCurrency($charge->currency);
-        $transaction->setStatus($charge->status);
-        $transaction->setCustomerId($charge->customer);
+        $transaction->setId($subscription->id);
+        $transaction->setProduct($plan->id);
+        $transaction->setAmount($plan->amount);
+        $transaction->setCurrency($plan->currency);
+        $transaction->setStatus($subscription->status);
+        $transaction->setCustomerId($subscription->customer);
+        $transaction->setCurrentPeriodEnd($currentPeriodEnd);
         $transaction->setUser($this->getUser());
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -94,8 +104,8 @@ class PaymentController extends Controller
         // Add a message, redirect to success
         $this->addFlash('success', 'Payment successful!');
         return $this->redirectToRoute('success', [
-            'tid' => $charge->id,
-            'product' => $charge->description,
+            'tid' => $subscription->id,
+            'product' => $plan->id,
         ]);
 
 
@@ -103,14 +113,15 @@ class PaymentController extends Controller
 
     /**
      * @Route("payment/success", name="success")
+     * @param Request $request
+     * @return RedirectResponse|Response
      */
-    public function success()
+    public function success(Request $request)
     {
-        if (!empty($_GET['tid'] && !empty($_GET['product']))) {
-            $GET = filter_var_array($_GET, FILTER_SANITIZE_STRING);
 
-            $tid = $GET['tid'];
-            $product = $GET['product'];
+        if (!empty($request->query->get('tid') && !empty($request->query->get('product')))) {
+            $tid = $request->query->get('tid');
+            $product = $request->query->get('product');
         } else {
             return $this->redirectToRoute('payment');
         }

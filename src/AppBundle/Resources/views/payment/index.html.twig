@@ -6,13 +6,109 @@
     <link href="{{ asset('bundles/app/css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('bundles/app/css/style_payment.css') }}" rel="stylesheet">
 
+    <style type="text/css">
+        .container { margin-top: 100px; }
+        .card { width: 300px; }
+        .card:hover {
+            -webkit-transform: scale(1.05);
+            -moz-transform: scale(1.05);
+            -ms-transform: scale(1.05);
+            -o-transform: scale(1.05);
+            transform: scale(1.05);
+            -webkit-transition: all .3s ease-in-out;
+            -moz-transition: all .3s ease-in-out;
+            -ms-transition: all .3s ease-in-out;
+            -o-transition: all .3s ease-in-out;
+            transition: all .3s ease-in-out;
+        }
+        .price { font-size: 72px }
+        .currency {
+            font-size: 25px;
+            position: relative;
+            top: -30px;
+        }
+        .list-group-item {
+            border: 0px;
+            padding: 5px;
+        }
+    </style>
+
+
 {% endblock %}
 
 {% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2 class="price"><span class="currency">$</span>42</h2>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="text-center">Month subscribe</h1>
+                        <ul class="list-group">
+                            <li class="list-group-item">Feature 1</li>
+                            <li class="list-group-item">Feature 2</li>
+                            <li class="list-group-item">Feature 3</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <form action="{{ path('charge', { username: username, pid: 'month' }) }}"
+                              method="POST">
+                            <script
+                                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                    data-key="pk_test_Yg207yB2SiQnfOh4ebkkOikd00UR7Blvhq"
+                                    data-amount="4200"
+                                    data-name="CodingPassiveIncome"
+                                    data-description="Widget"
+                                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                    data-locale="auto"
+                                    data-currency="usd">
+                            </script>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2 class="price"><span class="currency">$</span>100</h2>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="text-center">Year subscription</h1>
+                        <ul class="list-group">
+                            <li class="list-group-item">Feature 1</li>
+                            <li class="list-group-item">Feature 2</li>
+                            <li class="list-group-item">Feature 3</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <form action="{{ path('charge', { username: username, pid: 'year' }) }}"
+                              method="POST">
+                            <script
+                                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                    data-key="pk_test_Yg207yB2SiQnfOh4ebkkOikd00UR7Blvhq"
+                                    data-amount="10000"
+                                    data-name="CodingPassiveIncome"
+                                    data-description="Widget"
+                                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                    data-locale="auto"
+                                    data-currency="usd">
+                            </script>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+   {#
     <div class="container col-md-5 col-md-offset-3">
         <h2 class="my-4 text-center">Subscription 42$</h2>
 
-        <form action="{{ path('charge', { username: username }) }}" method="post" id="payment-form">
+        <form action="{{ path('charge', { username: username }) }}" method="post" id="payment-form2">
             <div class="form-row">
                 {#<input
                         type="text" name="first_name"
@@ -28,7 +124,7 @@
                         type="email" name="email"
                         class="form-control mb-3 StripeElement StripeElement--empty"
                         placeholder="Email Address"
-                >#}
+                >
                 <div><strong>{{ username }}</strong></div>
                 <div id="card-element" class="form-control">
                     <!-- A Stripe Element will be inserted here. -->
@@ -41,7 +137,7 @@
             <button>Submit Payment</button>
         </form>
     </div>
-
+#}
 {% endblock %}
 
 
