@@ -61,8 +61,8 @@ class PaymentController extends Controller
         ]);
 
         $plans = [
-            'month' => 'Subscription_month',
-            'year' => 'Subscription_year'
+            'month' => 'Month_subscription',
+            'year' => 'Year_subscription'
         ];
 
         //Create Subscription
