@@ -80,12 +80,11 @@ class PaymentController extends Controller
         $plan = $subscription->plan;
 
         //convert UNIX timestamps to date strings
-        $currentPeriodEnd = gmdate("Y-m-d | H:i:s", $subscription->current_period_end);
+        //$currentPeriodEnd = gmdate("Y-m-d | H:i:s", $subscription->current_period_end);
 
         // Instantiate Transaction
         $transaction = new Transaction();
 
-        dump($plan);
 
         // Add transaction to Db
         $transaction->setId($subscription->id);
@@ -94,7 +93,7 @@ class PaymentController extends Controller
         $transaction->setCurrency($plan->currency);
         $transaction->setStatus($subscription->status);
         $transaction->setCustomerId($subscription->customer);
-        $transaction->setCurrentPeriodEnd($currentPeriodEnd);
+        $transaction->setCurrentPeriodEnd($subscription->current_period_end);
         $transaction->setUser($this->getUser());
 
         $entityManager = $this->getDoctrine()->getManager();
@@ -149,4 +148,5 @@ class PaymentController extends Controller
             'transactions' => $transactions,
         ]);
     }
+
 }

@@ -4,11 +4,13 @@
 namespace AppBundle\Repository;
 
 
+use Doctrine\ORM\EntityRepository;
+
 /**
  * UserRepository
  *
  */
-class UserRepository extends \Doctrine\ORM\EntityRepository
+class UserRepository extends EntityRepository
 {
 
     public function findByEmail($email)
