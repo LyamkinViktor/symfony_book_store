@@ -26,73 +26,6 @@
     {% if is_granted('ROLE_USER') %}
         <div style="text-align: right"><strong>{{ username }}</strong></div>
     {% endif %}
-    {# Two standart forms
-
-     <div class="container">
-         <div class="row">
-             <div class="col-md-6">
-                 <div class="card">
-                     <div class="card-header text-center">
-                         <h2 class="price"><span class="currency">$</span>42</h2>
-                     </div>
-                     <div class="card-body">
-                         <h1 class="text-center">Month subscription</h1>
-                         <ul class="list-group">
-                             <li class="list-group-item">Feature 1</li>
-                             <li class="list-group-item">Feature 2</li>
-                             <li class="list-group-item">Feature 3</li>
-                         </ul>
-                     </div>
-                     <div class="card-footer">
-                         <form action="{{ path('charge', { username: username, pid: 'month' }) }}"
-                               method="POST">
-                             <script
-                                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                     data-key="pk_test_Yg207yB2SiQnfOh4ebkkOikd00UR7Blvhq"
-                                     data-amount="4200"
-                                     data-name="CodingPassiveIncome"
-                                     data-description="Widget"
-                                     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                                     data-locale="auto"
-                                     data-currency="usd">
-                             </script>
-                         </form>
-                     </div>
-                 </div>
-             </div>
-             <div class="col-md-6">
-                 <div class="card">
-                     <div class="card-header text-center">
-                         <h2 class="price"><span class="currency">$</span>100</h2>
-                     </div>
-                     <div class="card-body">
-                         <h1 class="text-center">Year subscription</h1>
-                         <ul class="list-group">
-                             <li class="list-group-item">Feature 1</li>
-                             <li class="list-group-item">Feature 2</li>
-                             <li class="list-group-item">Feature 3</li>
-                         </ul>
-                     </div>
-                     <div class="card-footer">
-                         <form action="{{ path('charge', { username: username, pid: 'year' }) }}"
-                               method="POST">
-                             <script
-                                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                     data-key="pk_test_Yg207yB2SiQnfOh4ebkkOikd00UR7Blvhq"
-                                     data-amount="10000"
-                                     data-name="CodingPassiveIncome"
-                                     data-description="Widget"
-                                     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                                     data-locale="auto"
-                                     data-currency="usd">
-                             </script>
-                         </form>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
-     #}
 
     <div class="paymentForm">
         <form action="{{ path('charge', { username: username, pid: 'month' }) }}" method="post" id="payment-form">
@@ -113,6 +46,76 @@
             <button class="btn btn-success">Submit Payment</button>
         </form>
     </div>
+
+
+    {# Two standart forms
+
+ <div class="container">
+     <div class="row">
+         <div class="col-md-6">
+             <div class="card">
+                 <div class="card-header text-center">
+                     <h2 class="price"><span class="currency">$</span>42</h2>
+                 </div>
+                 <div class="card-body">
+                     <h1 class="text-center">Month subscription</h1>
+                     <ul class="list-group">
+                         <li class="list-group-item">Feature 1</li>
+                         <li class="list-group-item">Feature 2</li>
+                         <li class="list-group-item">Feature 3</li>
+                     </ul>
+                 </div>
+                 <div class="card-footer">
+                     <form action="{{ path('charge', { username: username, pid: 'month' }) }}"
+                           method="POST">
+                         <script
+                                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                 data-key="pk_test_Yg207yB2SiQnfOh4ebkkOikd00UR7Blvhq"
+                                 data-amount="4200"
+                                 data-name="CodingPassiveIncome"
+                                 data-description="Widget"
+                                 data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                 data-locale="auto"
+                                 data-currency="usd">
+                         </script>
+                     </form>
+                 </div>
+             </div>
+         </div>
+         <div class="col-md-6">
+             <div class="card">
+                 <div class="card-header text-center">
+                     <h2 class="price"><span class="currency">$</span>100</h2>
+                 </div>
+                 <div class="card-body">
+                     <h1 class="text-center">Year subscription</h1>
+                     <ul class="list-group">
+                         <li class="list-group-item">Feature 1</li>
+                         <li class="list-group-item">Feature 2</li>
+                         <li class="list-group-item">Feature 3</li>
+                     </ul>
+                 </div>
+                 <div class="card-footer">
+                     <form action="{{ path('charge', { username: username, pid: 'year' }) }}"
+                           method="POST">
+                         <script
+                                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                 data-key="pk_test_Yg207yB2SiQnfOh4ebkkOikd00UR7Blvhq"
+                                 data-amount="10000"
+                                 data-name="CodingPassiveIncome"
+                                 data-description="Widget"
+                                 data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                 data-locale="auto"
+                                 data-currency="usd">
+                         </script>
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+ #}
+
 
 {% endblock %}
 
