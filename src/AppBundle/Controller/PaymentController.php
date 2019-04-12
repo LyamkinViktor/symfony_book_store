@@ -43,6 +43,8 @@ class PaymentController extends Controller
      */
     public function chargeAction(Request $request, $username, $pid)
     {
+
+
         if (empty($request->request->get('stripeToken'))) {
             return $this->redirectToRoute('payment');
         } else {
@@ -51,6 +53,7 @@ class PaymentController extends Controller
 
         //Set secret key
         Stripe::setApiKey($this->getParameter('stripe_secret_key'));
+
 
 
         //Create Customer in stripe

@@ -4,40 +4,93 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Entity\Subscription;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Stripe\Stripe;
-use Stripe\WebhookEndpoint;
+use Stripe\Event;
+use Stripe\StripeObject;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends Controller
 {
     /**
-     * @Route("/webhooks", name="webhooks_page")
+     * @Route("/webhooks/stripe", name="webhook_stripe")
+     * @param Request $request
+     * @return Response
+     * @throws Exception
      */
-    public function indexAction()
+    public function stripeWebhookAction(Request $request)
     {
-        /*
-        Stripe::setApiKey("sk_test_2kKmRAbpAQf5q60aaNomaDu000Y2RcIDSd");
+        $data = json_decode($request->getContent(), true);
+        if ($data === null) {
+            throw new Exception('Bad JSON body from Stripe!');
+        }
 
-        $webhook = WebhookEndpoint::create([
-            "url" => "http://lyamkin.personal.dev7.sibers.com/w/",
-            "enabled_events" => ["charge.failed", "charge.succeeded"]
-        ]);
+        $eventId = $data['id'];
 
-        //dump($webhook);
+        if ($data['type'] === 'invoice.payment_succeeded') {
 
-        // Retrieve the request's body and parse it as JSON:
-        $input = @file_get_contents('');
-        $event_json = json_decode($input);
+        }
 
-        // Do something with $event_json
-        dump($event_json);
+        $stripeEvent = $this->findEvent($eventId);
 
-        // Return a response to acknowledge receipt of the event
-        http_response_code(200); // PHP 5.4 or greater
-
-        */
+        /** @var Event $stripeEvent */
+        switch ($stripeEvent->type) {
+            case 'customer.subscription.deleted':
+                $stripeSubscriptionId = $stripeEvent->data->object->id;
+                $subscription = $this->findSubscription($stripeSubscriptionId);
+                $this->fullyCancelSubscription($subscription);
+                break;
+            default:
+                throw new Exception(
+                    'Unexpected webhook type form Stripe! ' . $stripeEvent->type
+                );
+        }
 
         return $this->render('@App/webhook/index.html.twig');
     }
+
+    /**
+     * @param $eventId
+     * @return StripeObject
+     */
+    public function findEvent($eventId)
+    {
+        return Event::retrieve($eventId);
+    }
+
+    /**
+     * @param $stripeSubscriptionId
+     * @return Subscription|object|null
+     * @throws Exception
+     */
+    private function findSubscription($stripeSubscriptionId)
+    {
+        $subscription = $this->getDoctrine()
+            ->getRepository('AppBundle:Subscription')
+            ->findOneBy([
+                'stripeSubscriptionId' => $stripeSubscriptionId
+            ]);
+        if (!$subscription) {
+            throw new Exception(
+                'Somehow we have no subscription id ' . $stripeSubscriptionId
+            );
+        }
+        return $subscription;
+    }
+
+    /**
+     *
+     * @param Subscription $subscription
+     */
+    public function fullyCancelSubscription(Subscription $subscription)
+    {
+        $subscription->cancel();
+        $this->em->persist($subscription);
+        $this->em->flush($subscription);
+    }
+
+
 }
