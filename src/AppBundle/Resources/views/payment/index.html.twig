@@ -2,118 +2,145 @@
 
 {% block styles %}
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/3.3/examples/starter-template/">
-    <!-- Bootstrap core CSS -->
     <link href="{{ asset('bundles/app/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('bundles/app/css/style.css') }}" rel="stylesheet">
-    <style>
-        .paymentForm {
-            margin-top: 100px;
-            text-align: center;
+    <link href="{{ asset('bundles/app/css/style_payment.css') }}" rel="stylesheet">
+
+    <style type="text/css">
+        .container { margin-top: 100px; }
+        .card { width: 300px; }
+        .card:hover {
+            -webkit-transform: scale(1.05);
+            -moz-transform: scale(1.05);
+            -ms-transform: scale(1.05);
+            -o-transform: scale(1.05);
+            transform: scale(1.05);
+            -webkit-transition: all .3s ease-in-out;
+            -moz-transition: all .3s ease-in-out;
+            -ms-transition: all .3s ease-in-out;
+            -o-transition: all .3s ease-in-out;
+            transition: all .3s ease-in-out;
         }
-        form {
-            display: inline-block;
+        .price { font-size: 72px }
+        .currency {
+            font-size: 25px;
+            position: relative;
+            top: -30px;
         }
-        #card-element {
-            width: 400px;
+        .list-group-item {
+            border: 0px;
+            padding: 5px;
         }
     </style>
-{% endblock %}
 
+
+{% endblock %}
 
 {% block body %}
 
-    {% if is_granted('ROLE_USER') %}
-        <div style="text-align: right"><strong>{{ username }}</strong></div>
-    {% endif %}
-    {# Two standart forms
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2 class="price"><span class="currency">$</span>42</h2>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="text-center">Month subscription</h1>
+                        <ul class="list-group">
+                            <li class="list-group-item">Feature 1</li>
+                            <li class="list-group-item">Feature 2</li>
+                            <li class="list-group-item">Feature 3</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <form action="{{ path('charge', { username: username, pid: 'month' }) }}"
+                              method="POST">
+                            <script
+                                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                    data-key="pk_test_Yg207yB2SiQnfOh4ebkkOikd00UR7Blvhq"
+                                    data-amount="4200"
+                                    data-name="CodingPassiveIncome"
+                                    data-description="Widget"
+                                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                    data-locale="auto"
+                                    data-currency="usd">
+                            </script>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header text-center">
+                        <h2 class="price"><span class="currency">$</span>100</h2>
+                    </div>
+                    <div class="card-body">
+                        <h1 class="text-center">Year subscription</h1>
+                        <ul class="list-group">
+                            <li class="list-group-item">Feature 1</li>
+                            <li class="list-group-item">Feature 2</li>
+                            <li class="list-group-item">Feature 3</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <form action="{{ path('charge', { username: username, pid: 'year' }) }}"
+                              method="POST">
+                            <script
+                                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                    data-key="pk_test_Yg207yB2SiQnfOh4ebkkOikd00UR7Blvhq"
+                                    data-amount="10000"
+                                    data-name="CodingPassiveIncome"
+                                    data-description="Widget"
+                                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                    data-locale="auto"
+                                    data-currency="usd">
+                            </script>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-     <div class="container">
-         <div class="row">
-             <div class="col-md-6">
-                 <div class="card">
-                     <div class="card-header text-center">
-                         <h2 class="price"><span class="currency">$</span>42</h2>
-                     </div>
-                     <div class="card-body">
-                         <h1 class="text-center">Month subscription</h1>
-                         <ul class="list-group">
-                             <li class="list-group-item">Feature 1</li>
-                             <li class="list-group-item">Feature 2</li>
-                             <li class="list-group-item">Feature 3</li>
-                         </ul>
-                     </div>
-                     <div class="card-footer">
-                         <form action="{{ path('charge', { username: username, pid: 'month' }) }}"
-                               method="POST">
-                             <script
-                                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                     data-key="pk_test_Yg207yB2SiQnfOh4ebkkOikd00UR7Blvhq"
-                                     data-amount="4200"
-                                     data-name="CodingPassiveIncome"
-                                     data-description="Widget"
-                                     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                                     data-locale="auto"
-                                     data-currency="usd">
-                             </script>
-                         </form>
-                     </div>
-                 </div>
-             </div>
-             <div class="col-md-6">
-                 <div class="card">
-                     <div class="card-header text-center">
-                         <h2 class="price"><span class="currency">$</span>100</h2>
-                     </div>
-                     <div class="card-body">
-                         <h1 class="text-center">Year subscription</h1>
-                         <ul class="list-group">
-                             <li class="list-group-item">Feature 1</li>
-                             <li class="list-group-item">Feature 2</li>
-                             <li class="list-group-item">Feature 3</li>
-                         </ul>
-                     </div>
-                     <div class="card-footer">
-                         <form action="{{ path('charge', { username: username, pid: 'year' }) }}"
-                               method="POST">
-                             <script
-                                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                     data-key="pk_test_Yg207yB2SiQnfOh4ebkkOikd00UR7Blvhq"
-                                     data-amount="10000"
-                                     data-name="CodingPassiveIncome"
-                                     data-description="Widget"
-                                     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                                     data-locale="auto"
-                                     data-currency="usd">
-                             </script>
-                         </form>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </div>
-     #}
 
-    <div class="paymentForm">
-        <form action="{{ path('charge', { username: username, pid: 'month' }) }}" method="post" id="payment-form">
-            <div class="form-group">
+   {#
 
-                <label for="card-element">Month subscription 42$</label>
-                <div  class="form-control" id="card-element">
+ ---Custom form
+
+    <div class="container col-md-5 col-md-offset-3">
+        <h2 class="my-4 text-center">Subscription 42$</h2>
+
+        <form action="{{ path('charge', { username: username }) }}" method="post" id="payment-form2">
+            <div class="form-row">
+                {#<input
+                        type="text" name="first_name"
+                       class="form-control mb-3 StripeElement StripeElement--empty"
+                       placeholder="First Name"
+                >
+                <input
+                        type="text" name="last_name"
+                        class="form-control mb-3 StripeElement StripeElement--empty"
+                        placeholder="Last Name"
+                >
+                <input
+                        type="email" name="email"
+                        class="form-control mb-3 StripeElement StripeElement--empty"
+                        placeholder="Email Address"
+                >
+                <div><strong>{{ username }}</strong></div>
+                <div id="card-element" class="form-control">
                     <!-- A Stripe Element will be inserted here. -->
                 </div>
 
-
-                <div id="card-errors" role="alert">
-                    <!-- Used to display form errors. -->
-                </div>
-
+                <!-- Used to display form errors. -->
+                <div id="card-errors" role="alert"></div>
             </div>
 
-            <button class="btn btn-success">Submit Payment</button>
+            <button>Submit Payment</button>
         </form>
     </div>
-
+#}
 {% endblock %}
 
 
@@ -123,79 +150,89 @@
     <script src="{{ asset('bundles/app/js/jquery.min.js') }}"></script>
     <script src="{{ asset('bundles/app/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('bundles/app/js/popper.min.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <script src="https://js.stripe.com/v3/"></script>
+{#
+
+----Validation of custom form
+
     <script>
-    // Create a Stripe client.
-    var stripe = Stripe('pk_test_Yg207yB2SiQnfOh4ebkkOikd00UR7Blvhq');
 
-    // Create an instance of Elements.
-    var elements = stripe.elements();
+        // Create a Stripe client.
+        var stripe = Stripe('pk_test_Yg207yB2SiQnfOh4ebkkOikd00UR7Blvhq');
 
-    // Custom styling can be passed to options when creating an Element.
-    // (Note that this demo uses a wider set of styles than the guide below.)
-    var style = {
-    base: {
-    color: '#32325d',
-    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-    fontSmoothing: 'antialiased',
-    fontSize: '16px',
-    '::placeholder': {
-    color: '#aab7c4'
-    }
-    },
-    invalid: {
-    color: '#fa755a',
-    iconColor: '#fa755a'
-    }
-    };
+        // Create an instance of Elements.
+        var elements = stripe.elements();
 
-    // Create an instance of the card Element.
-    var card = elements.create('card', {style: style});
+        // Custom styling can be passed to options when creating an Element.
+        // (Note that this demo uses a wider set of styles than the guide below.)
+        var style = {
+            base: {
+                color: '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        };
 
-    // Add an instance of the card Element into the `card-element` <div>.
-    card.mount('#card-element');
+        //Style button with BS
+        document.querySelector('#payment-form button')
+            .classList = 'btn btn-primary btn-block mt-4';
 
-    // Handle real-time validation errors from the card Element.
-    card.addEventListener('change', function(event) {
-    var displayError = document.getElementById('card-errors');
-    if (event.error) {
-    displayError.textContent = event.error.message;
-    } else {
-    displayError.textContent = '';
-    }
-    });
+        // Create an instance of the card Element.
+        var card = elements.create('card', {style: style});
 
-    // Handle form submission.
-    var form = document.getElementById('payment-form');
-    form.addEventListener('submit', function(event) {
-    event.preventDefault();
+        // Add an instance of the card Element into the `card-element` <div>.
+        card.mount('#card-element');
 
-    stripe.createToken(card).then(function(result) {
-    if (result.error) {
-    // Inform the user if there was an error.
-    var errorElement = document.getElementById('card-errors');
-    errorElement.textContent = result.error.message;
-    } else {
-    // Send the token to your server.
-    stripeTokenHandler(result.token);
-    }
-    });
-    });
+        // Handle real-time validation errors from the card Element.
+        card.addEventListener('change', function(event) {
+            var displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
 
-    // Submit the form with the token ID.
-    function stripeTokenHandler(token) {
-    // Insert the token ID into the form so it gets submitted to the server
-    var form = document.getElementById('payment-form');
-    var hiddenInput = document.createElement('input');
-    hiddenInput.setAttribute('type', 'hidden');
-    hiddenInput.setAttribute('name', 'stripeToken');
-    hiddenInput.setAttribute('value', token.id);
-    form.appendChild(hiddenInput);
+        // Handle form submission.
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-    // Submit the form
-    form.submit();
-    }
+            stripe.createToken(card).then(function(result) {
+                if (result.error) {
+                    // Inform the user if there was an error.
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                } else {
+                    // Send the token to your server.
+                    stripeTokenHandler(result.token);
+                }
+            });
+        });
+
+        // Submit the form with the token ID.
+        function stripeTokenHandler(token) {
+            // Insert the token ID into the form so it gets submitted to the server
+            var form = document.getElementById('payment-form');
+            var hiddenInput = document.createElement('input');
+            hiddenInput.setAttribute('type', 'hidden');
+            hiddenInput.setAttribute('name', 'stripeToken');
+            hiddenInput.setAttribute('value', token.id);
+            form.appendChild(hiddenInput);
+
+            // Submit the form
+            form.submit();
+        }
     </script>
-
+#}
 {% endblock %}
