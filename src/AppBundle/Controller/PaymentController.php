@@ -119,8 +119,10 @@ class PaymentController extends Controller
     {
 
         if (!empty($request->query->get('tid') && !empty($request->query->get('product')))) {
+
             $tid = $request->query->get('tid');
             $product = $request->query->get('product');
+
         } else {
             return $this->redirectToRoute('payment');
         }
