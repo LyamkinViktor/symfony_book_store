@@ -75,9 +75,7 @@ class Subscription
 
 
     /**
-     * @var DateTime
-     *
-     * @ORM\Column(name="ends_at", type="datetime")
+     * @ORM\Column(name="ends_at", type="string", nullable=true)
      */
     private $endsAt;
 
@@ -95,6 +93,7 @@ class Subscription
         } catch (Exception $e) {
 
         }
+
     }
 
 
@@ -262,17 +261,17 @@ class Subscription
 
 
     /**
-     * @return DateTime
+     * @return string
      */
-    public function getEndsAt(): DateTime
+    public function getEndsAt()
     {
         return $this->endsAt;
     }
 
     /**
-     * @param DateTime $endsAt
+     * @param string
      */
-    public function setEndsAt(DateTime $endsAt): void
+    public function setEndsAt($endsAt)
     {
         $this->endsAt = $endsAt;
     }
