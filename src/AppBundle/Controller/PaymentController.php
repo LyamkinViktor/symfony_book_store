@@ -12,6 +12,7 @@ use Stripe\Event;
 use Stripe\Stripe;
 use Stripe\StripeObject;
 use Stripe\Subscription;
+use Stripe\WebhookEndpoint;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -87,8 +88,13 @@ class PaymentController extends Controller
         //convert UNIX timestamps to date strings
         //$currentPeriodEnd = gmdate("Y-m-d | H:i:s", $subscription->current_period_end);
 
+        Stripe::setApiKey($this->getParameter('stripe_public_key'));
 
-        //dump webhook
+        WebhookEndpoint::create([
+            "url" => "http://lyamkin.personal.dev7.sibers.com/payment/success",
+            "enabled_events" => ["charge.failed", "charge.succeeded"]
+        ]);
+
         $data = json_decode($request->getContent(), true);
         if ($data === null) {
             throw new Exception('Bad JSON body from Stripe!');
@@ -98,50 +104,56 @@ class PaymentController extends Controller
 
         $stripeEvent = $this->findEvent($eventId);
 
-        var_dump($data); exit;
+        file_put_contents
+        (__DIR__ . '/../log.txt', $stripeEvent);
+
+
+
+
+
 
         // Instantiate Transaction
-//        $transaction = new Transaction();
+        $transaction = new Transaction();
 
 
-//        // Add transaction to Db
-//        $transaction->setId($subscription->id);
-//        $transaction->setProduct($plan->id);
-//        $transaction->setAmount($plan->amount);
-//        $transaction->setCurrency($plan->currency);
-//        $transaction->setStatus($subscription->status);
-//        $transaction->setCustomerId($subscription->customer);
-//        $transaction->setCurrentPeriodEnd($subscription->current_period_end);
-//        $transaction->setUser($this->getUser());
-//
-//        $entityManager = $this->getDoctrine()->getManager();
-//        $entityManager->persist($transaction);
-//        $entityManager->flush();
-//
-//
-//        // Instantiate SubscriptionDb
-//        $subscriptionDb = new \AppBundle\Entity\Subscription();
-//
-//        // Add subscriptionDb to Db
-//        $subscriptionDb->setSubscriptionId($subscription->id);
-//        $subscriptionDb->setProduct($plan->id);
-//        $subscriptionDb->setAmount($plan->amount);
-//        $subscriptionDb->setCurrency($plan->currency);
-//        $subscriptionDb->setStatus($subscription->status);
-//        $subscriptionDb->setCustomerId($subscription->customer);
-//        $subscriptionDb->setCurrentPeriodEnd($subscription->current_period_end);
-//        $subscriptionDb->setUser($this->getUser());
-//
-//        $entityManager = $this->getDoctrine()->getManager();
-//        $entityManager->persist($subscriptionDb);
-//        $entityManager->flush();
-//
-//        // Add a message, redirect to success
-//        $this->addFlash('success', 'Payment successful!');
-//        return $this->redirectToRoute('success', [
-//            'tid' => $subscription->id,
-//            'product' => $plan->id,
-//        ]);
+        // Add transaction to Db
+        $transaction->setId($subscription->id);
+        $transaction->setProduct($plan->id);
+        $transaction->setAmount($plan->amount);
+        $transaction->setCurrency($plan->currency);
+        $transaction->setStatus($subscription->status);
+        $transaction->setCustomerId($subscription->customer);
+        $transaction->setCurrentPeriodEnd($subscription->current_period_end);
+        $transaction->setUser($this->getUser());
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($transaction);
+        $entityManager->flush();
+
+
+        // Instantiate SubscriptionDb
+        $subscriptionDb = new \AppBundle\Entity\Subscription();
+
+        // Add subscriptionDb to Db
+        $subscriptionDb->setSubscriptionId($subscription->id);
+        $subscriptionDb->setProduct($plan->id);
+        $subscriptionDb->setAmount($plan->amount);
+        $subscriptionDb->setCurrency($plan->currency);
+        $subscriptionDb->setStatus($subscription->status);
+        $subscriptionDb->setCustomerId($subscription->customer);
+        $subscriptionDb->setCurrentPeriodEnd($subscription->current_period_end);
+        $subscriptionDb->setUser($this->getUser());
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($subscriptionDb);
+        $entityManager->flush();
+
+        // Add a message, redirect to success
+        $this->addFlash('success', 'Payment successful!');
+        return $this->redirectToRoute('success', [
+            'tid' => $subscription->id,
+            'product' => $plan->id,
+        ]);
 
     }
 
