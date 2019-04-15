@@ -50,7 +50,11 @@ class WebhookController extends Controller
 //                );
 //        }
 
-        return $this->render('@App/webhook/index.html.twig');
+        $request = var_dump($request);
+
+        return $this->render('@App/webhook/index.html.twig', [
+            'request' => $request,
+        ]);
     }
 
     /**
