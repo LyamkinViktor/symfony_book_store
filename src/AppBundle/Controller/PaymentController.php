@@ -143,23 +143,6 @@ class PaymentController extends Controller
     public function success(Request $request)
     {
 
-        Stripe::setApiKey($this->getParameter('stripe_public_key'));
-
-
-        var_dump($request->getContent());exit;
-
-        $data = json_decode($request->getContent(), true);
-        if ($data === null) {
-            throw new Exception('Bad JSON body from Stripe!');
-        }
-
-        $eventId = $data['id'];
-
-        $stripeEvent = $this->findEvent($eventId);
-
-        file_put_contents
-        (__DIR__ . '/log.txt', $stripeEvent);
-
         if (!empty($request->query->get('tid') && !empty($request->query->get('product')))) {
 
             $tid = $request->query->get('tid');
@@ -211,57 +194,5 @@ class PaymentController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @return StripeObject
-     * @throws Exception
-     */
-    public function stripeWebhookAction(Request $request)
-    {
-        $data = json_decode($request->getContent(), true);
-        if ($data === null) {
-            throw new Exception('Bad JSON body from Stripe!');
-        }
-
-        $eventId = $data['id'];
-
-        // Actions depending on webhooks
-//        if ($data['type'] === 'invoice.payment_succeeded') {
-//            //To do something
-//         }
-
-        $stripeEvent = $this->findEvent($eventId);
-
-        return $stripeEvent;
-    }
-
-    /**
-     * @param $eventId
-     * @return StripeObject
-     */
-    public function findEvent($eventId)
-    {
-        return Event::retrieve($eventId);
-    }
-
-    /**
-     * @param $stripeSubscriptionId
-     * @return \AppBundle\Entity\Subscription|object|null
-     * @throws Exception
-     */
-    private function findSubscription($stripeSubscriptionId)
-    {
-        $subscription = $this->getDoctrine()
-            ->getRepository('AppBundle:Subscription')
-            ->findOneBy([
-                'stripeSubscriptionId' => $stripeSubscriptionId
-            ]);
-        if (!$subscription) {
-            throw new Exception(
-                'Somehow we have no subscription id ' . $stripeSubscriptionId
-            );
-        }
-        return $subscription;
-    }
 
 }

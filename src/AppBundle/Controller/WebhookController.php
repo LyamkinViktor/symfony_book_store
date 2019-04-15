@@ -23,32 +23,32 @@ class WebhookController extends Controller
      */
     public function stripeWebhookAction(Request $request)
     {
-        $data = json_decode($request->getContent(), true);
-        if ($data === null) {
-            throw new Exception('Bad JSON body from Stripe!');
-        }
-
-        $eventId = $data['id'];
-
-        // Actions depending on webhooks
-//        if ($data['type'] === 'invoice.payment_succeeded') {
-//            //To do something
-//         }
-
-        $stripeEvent = $this->findEvent($eventId);
-
-        /** @var Event $stripeEvent */
-        switch ($stripeEvent->type) {
-            case 'customer.subscription.deleted':
-                $stripeSubscriptionId = $stripeEvent->data->object->id;
-                $subscription = $this->findSubscription($stripeSubscriptionId);
-                $this->fullyCancelSubscription($subscription);
-                break;
-            default:
-                throw new Exception(
-                    'Unexpected webhook type form Stripe! ' . $stripeEvent->type
-                );
-        }
+//        $data = json_decode($request->getContent(), true);
+//        if ($data === null) {
+//            throw new Exception('Bad JSON body from Stripe!');
+//        }
+//
+//        $eventId = $data['id'];
+//
+//        // Actions depending on webhooks
+////        if ($data['type'] === 'invoice.payment_succeeded') {
+////            //To do something
+////         }
+//
+//        $stripeEvent = $this->findEvent($eventId);
+//
+//        /** @var Event $stripeEvent */
+//        switch ($stripeEvent->type) {
+//            case 'customer.subscription.deleted':
+//                $stripeSubscriptionId = $stripeEvent->data->object->id;
+//                $subscription = $this->findSubscription($stripeSubscriptionId);
+//                $this->fullyCancelSubscription($subscription);
+//                break;
+//            default:
+//                throw new Exception(
+//                    'Unexpected webhook type form Stripe! ' . $stripeEvent->type
+//                );
+//        }
 
         return $this->render('@App/webhook/index.html.twig');
     }
