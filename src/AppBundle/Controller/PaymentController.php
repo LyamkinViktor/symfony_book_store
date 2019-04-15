@@ -46,6 +46,8 @@ class PaymentController extends Controller
      */
     public function chargeAction(Request $request, $username, $pid)
     {
+<<<<<<< HEAD
+=======
 
 
         if (empty($request->request->get('stripeToken'))) {
@@ -56,9 +58,21 @@ class PaymentController extends Controller
 
         //Set secret key
         Stripe::setApiKey($this->getParameter('stripe_secret_key'));
+>>>>>>> cc3eae3b1f7c87c7fbb82b86011401c8e992db9e
 
+	if (empty($request->request->get('stripeToken'))) {
+    	    return $this->redirectToRoute('payment');
+	} else {
+    	    $token = $request->request->get('stripeToken');
+	}
 
+<<<<<<< HEAD
+	//Set secret key
+	Stripe::setApiKey($this->getParameter('stripe_secret_key'));
+	
+=======
 
+>>>>>>> cc3eae3b1f7c87c7fbb82b86011401c8e992db9e
         //Create Customer in stripe
         /** @var Customer $customer */
         $customer = Customer::create([
