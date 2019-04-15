@@ -88,24 +88,6 @@ class PaymentController extends Controller
         //convert UNIX timestamps to date strings
         //$currentPeriodEnd = gmdate("Y-m-d | H:i:s", $subscription->current_period_end);
 
-        Stripe::setApiKey($this->getParameter('stripe_public_key'));
-
-
-        var_dump($request->getContent());exit;
-
-        $data = json_decode($request->getContent(), true);
-        if ($data === null) {
-            throw new Exception('Bad JSON body from Stripe!');
-        }
-
-        $eventId = $data['id'];
-
-        $stripeEvent = $this->findEvent($eventId);
-
-        file_put_contents
-        (__DIR__ . '/log.txt', $stripeEvent);
-
-
 
         // Instantiate Transaction
         $transaction = new Transaction();
@@ -160,6 +142,24 @@ class PaymentController extends Controller
      */
     public function success(Request $request)
     {
+
+        Stripe::setApiKey($this->getParameter('stripe_public_key'));
+
+
+        var_dump($request->getContent());exit;
+
+        $data = json_decode($request->getContent(), true);
+        if ($data === null) {
+            throw new Exception('Bad JSON body from Stripe!');
+        }
+
+        $eventId = $data['id'];
+
+        $stripeEvent = $this->findEvent($eventId);
+
+        file_put_contents
+        (__DIR__ . '/log.txt', $stripeEvent);
+
         if (!empty($request->query->get('tid') && !empty($request->query->get('product')))) {
 
             $tid = $request->query->get('tid');
