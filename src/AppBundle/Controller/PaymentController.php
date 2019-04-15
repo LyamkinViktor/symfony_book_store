@@ -89,7 +89,7 @@ class PaymentController extends Controller
 
 
         //dump webhook
-        $event = $this->stripeWebhookAction($request);
+        $event = 123;
 
         var_dump($event); exit;
 
