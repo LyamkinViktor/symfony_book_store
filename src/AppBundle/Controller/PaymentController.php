@@ -142,7 +142,7 @@ class PaymentController extends Controller
         //dump webhook
         $event = $this->stripeWebhookAction($request);
 
-        dump($event); exit;
+        var_dump($event); exit;
 
         if (!empty($request->query->get('tid') && !empty($request->query->get('product')))) {
 
