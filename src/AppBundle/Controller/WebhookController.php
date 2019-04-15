@@ -23,11 +23,11 @@ class WebhookController extends Controller
      */
     public function stripeWebhookAction(Request $request)
     {
-//        $data = json_decode($request->getContent(), true);
-//        if ($data === null) {
-//            throw new Exception('Bad JSON body from Stripe!');
-//        }
-//
+        $data = json_decode($request->getContent(), true);
+        if ($data === null) {
+            throw new Exception('Bad JSON body from Stripe!');
+        }
+
 //        $eventId = $data['id'];
 //
 //        // Actions depending on webhooks
@@ -50,10 +50,10 @@ class WebhookController extends Controller
 //                );
 //        }
 
-        $request = var_dump($request);
+        $webhook = var_dump($data);
 
         return $this->render('@App/webhook/index.html.twig', [
-            'request' => $request,
+            'webhook' => $webhook,
         ]);
     }
 
