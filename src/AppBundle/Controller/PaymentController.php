@@ -89,9 +89,16 @@ class PaymentController extends Controller
 
 
         //dump webhook
-        $event = 123;
+        $data = json_decode($request->getContent(), true);
+        if ($data === null) {
+            throw new Exception('Bad JSON body from Stripe!');
+        }
 
-        var_dump($event); exit;
+        $eventId = $data['id'];
+
+        $stripeEvent = $this->findEvent($eventId);
+
+        var_dump($data); exit;
 
         // Instantiate Transaction
 //        $transaction = new Transaction();
