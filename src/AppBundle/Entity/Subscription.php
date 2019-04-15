@@ -73,6 +73,14 @@ class Subscription
      */
     private $createdAt;
 
+
+    /**
+     * @var DateTime
+     *
+     * @ORM\Column(name="ends_at", type="datetime")
+     */
+    private $endsAt;
+
     /**
      * @var string
      *
@@ -252,5 +260,27 @@ class Subscription
     }
 
 
+
+    /**
+     * @return DateTime
+     */
+    public function getEndsAt(): DateTime
+    {
+        return $this->endsAt;
+    }
+
+    /**
+     * @param DateTime $endsAt
+     */
+    public function setEndsAt(DateTime $endsAt): void
+    {
+        $this->endsAt = $endsAt;
+    }
+
+    public function cancel()
+    {
+        $this->endsAt = new DateTime();
+        $this->currentPeriodEnd = null;
+    }
 
 }
