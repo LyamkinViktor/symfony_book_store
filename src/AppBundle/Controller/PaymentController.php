@@ -43,6 +43,7 @@ class PaymentController extends Controller
      * @param $username
      * @param $pid
      * @return RedirectResponse
+     * @throws Exception
      */
     public function chargeAction(Request $request, $username, $pid)
     {
@@ -86,48 +87,54 @@ class PaymentController extends Controller
         //convert UNIX timestamps to date strings
         //$currentPeriodEnd = gmdate("Y-m-d | H:i:s", $subscription->current_period_end);
 
+
+        //dump webhook
+        $event = $this->stripeWebhookAction($request);
+
+        var_dump($event); exit;
+
         // Instantiate Transaction
-        $transaction = new Transaction();
+//        $transaction = new Transaction();
 
 
-        // Add transaction to Db
-        $transaction->setId($subscription->id);
-        $transaction->setProduct($plan->id);
-        $transaction->setAmount($plan->amount);
-        $transaction->setCurrency($plan->currency);
-        $transaction->setStatus($subscription->status);
-        $transaction->setCustomerId($subscription->customer);
-        $transaction->setCurrentPeriodEnd($subscription->current_period_end);
-        $transaction->setUser($this->getUser());
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($transaction);
-        $entityManager->flush();
-
-
-        // Instantiate SubscriptionDb
-        $subscriptionDb = new \AppBundle\Entity\Subscription();
-
-        // Add subscriptionDb to Db
-        $subscriptionDb->setSubscriptionId($subscription->id);
-        $subscriptionDb->setProduct($plan->id);
-        $subscriptionDb->setAmount($plan->amount);
-        $subscriptionDb->setCurrency($plan->currency);
-        $subscriptionDb->setStatus($subscription->status);
-        $subscriptionDb->setCustomerId($subscription->customer);
-        $subscriptionDb->setCurrentPeriodEnd($subscription->current_period_end);
-        $subscriptionDb->setUser($this->getUser());
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($subscriptionDb);
-        $entityManager->flush();
-
-        // Add a message, redirect to success
-        $this->addFlash('success', 'Payment successful!');
-        return $this->redirectToRoute('success', [
-            'tid' => $subscription->id,
-            'product' => $plan->id,
-        ]);
+//        // Add transaction to Db
+//        $transaction->setId($subscription->id);
+//        $transaction->setProduct($plan->id);
+//        $transaction->setAmount($plan->amount);
+//        $transaction->setCurrency($plan->currency);
+//        $transaction->setStatus($subscription->status);
+//        $transaction->setCustomerId($subscription->customer);
+//        $transaction->setCurrentPeriodEnd($subscription->current_period_end);
+//        $transaction->setUser($this->getUser());
+//
+//        $entityManager = $this->getDoctrine()->getManager();
+//        $entityManager->persist($transaction);
+//        $entityManager->flush();
+//
+//
+//        // Instantiate SubscriptionDb
+//        $subscriptionDb = new \AppBundle\Entity\Subscription();
+//
+//        // Add subscriptionDb to Db
+//        $subscriptionDb->setSubscriptionId($subscription->id);
+//        $subscriptionDb->setProduct($plan->id);
+//        $subscriptionDb->setAmount($plan->amount);
+//        $subscriptionDb->setCurrency($plan->currency);
+//        $subscriptionDb->setStatus($subscription->status);
+//        $subscriptionDb->setCustomerId($subscription->customer);
+//        $subscriptionDb->setCurrentPeriodEnd($subscription->current_period_end);
+//        $subscriptionDb->setUser($this->getUser());
+//
+//        $entityManager = $this->getDoctrine()->getManager();
+//        $entityManager->persist($subscriptionDb);
+//        $entityManager->flush();
+//
+//        // Add a message, redirect to success
+//        $this->addFlash('success', 'Payment successful!');
+//        return $this->redirectToRoute('success', [
+//            'tid' => $subscription->id,
+//            'product' => $plan->id,
+//        ]);
 
     }
 
@@ -139,11 +146,6 @@ class PaymentController extends Controller
      */
     public function success(Request $request)
     {
-        //dump webhook
-        $event = $this->stripeWebhookAction($request);
-
-        var_dump($event); exit;
-
         if (!empty($request->query->get('tid') && !empty($request->query->get('product')))) {
 
             $tid = $request->query->get('tid');
