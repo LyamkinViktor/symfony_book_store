@@ -30,9 +30,10 @@ class WebhookController extends Controller
 
         $eventId = $data['id'];
 
-        if ($data['type'] === 'invoice.payment_succeeded') {
-
-        }
+        // Actions depending on webhooks
+//        if ($data['type'] === 'invoice.payment_succeeded') {
+//            //To do something
+//         }
 
         $stripeEvent = $this->findEvent($eventId);
 
