@@ -90,10 +90,8 @@ class PaymentController extends Controller
 
         Stripe::setApiKey($this->getParameter('stripe_public_key'));
 
-        WebhookEndpoint::create([
-            "url" => "http://lyamkin.personal.dev7.sibers.com/payment/success",
-            "enabled_events" => ["charge.failed", "charge.succeeded"]
-        ]);
+
+        var_dump($request->getContent());exit;
 
         $data = json_decode($request->getContent(), true);
         if ($data === null) {
@@ -105,10 +103,7 @@ class PaymentController extends Controller
         $stripeEvent = $this->findEvent($eventId);
 
         file_put_contents
-        (__DIR__ . '/../log.txt', $stripeEvent);
-
-
-
+        (__DIR__ . '/log.txt', $stripeEvent);
 
 
 
