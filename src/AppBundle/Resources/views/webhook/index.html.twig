@@ -10,7 +10,9 @@
 
 
     <p>
-        {{ webhook }}
+        {% for hook in webhook %}
+            {{ hook }}
+        {% endfor %}
     </p>
 
 {% endblock %}
