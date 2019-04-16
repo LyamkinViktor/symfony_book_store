@@ -11,11 +11,14 @@ use Stripe\Event;
 use Stripe\StripeObject;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends Controller
 {
     /**
      * @Route("/webhooks/stripe", name="weebhook_stripe")
+     * @param Request $request
+     * @return Response
      * @throws Exception
      */
     public function stripeWebhookAction(Request $request)
@@ -28,17 +31,22 @@ class WebhookController extends Controller
 
         $eventId = $data['id'];
 
+        /** @var Event $stripeEvent */
         $stripeEvent = $this->findEvent($eventId);
 
         switch ($stripeEvent->type) {
             case 'customer.subscription.deleted':
+
                 // todo - fully cancel the user's subscription
+
                 $stripeSubscriptionId = $stripeEvent->data->object->id;
-                $subscription = $this->findSubsscription($stripeSubscriptionId);
+                $subscription = $this->findSubscription($stripeSubscriptionId);
                 $this->fullyCancelSubscription($subscription);
+
                 break;
-            default:
-                throw new Exception('Unexpected webhook from stripe' . $stripeEvent->type);
+
+                default:
+                    throw new Exception('Unexpected webhook from stripe' . $stripeEvent->type);
         }
 
         return $this->render('@App/webhook/index.html.twig');
@@ -53,7 +61,7 @@ class WebhookController extends Controller
         return Event::retrieve($eventId);
     }
 
-    private function findSubsscription($stripeSubscriptionId)
+    private function findSubscription($stripeSubscriptionId)
     {
         $subscription = $this->getDoctrine()
             ->getRepository('AppBundle:Subscription')
@@ -61,8 +69,9 @@ class WebhookController extends Controller
                 'subscriptionId' => $stripeSubscriptionId
             ]);
 
+
         if (!$subscription) {
-            throw new  \Exception('Somehow we have no subscription id ' . $stripeSubscriptionId);
+            throw new Exception('Somehow we have no subscription id ' . $stripeSubscriptionId);
         }
 
         return $subscription;
