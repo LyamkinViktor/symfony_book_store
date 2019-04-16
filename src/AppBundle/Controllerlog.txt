@@ -31,3 +31,5 @@ stripeEvent: customer.subscription.deleted
 subscriptionId: sub_Etbdsf152eopW3
 stripeEvent: customer.subscription.deleted
 subscriptionId: sub_Etbi0aAB8GN30n
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_EtbmNCj4ukeyXv
