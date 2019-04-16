@@ -22,27 +22,51 @@ class WebhookController extends Controller
      * @throws Exception
      */
     public function stripeWebhookAction(Request $request)
-    {
+    {	
+	//try ->, write catch to log file
+	//Set secret key
+	\Stripe\Stripe::setApiKey($this->getParameter('stripe_secret_key'));
+
         $data = json_decode($request->getContent(), true);
 
         if ($data === null) {
             throw new Exception('Bad JSON body from Stripe!');
         }
-
+        
         $eventId = $data['id'];
-
+	
+	
         /** @var Event $stripeEvent */
-        $stripeEvent = $this->findEvent($eventId);
+        $stripeEvent = \Stripe\Event::retrieve($eventId);
 
         switch ($stripeEvent->type) {
             case 'customer.subscription.deleted':
-
+		
+		file_put_contents(__DIR__ . 'log.txt','stripeEvent: ' . $stripeEvent->type . "\n", FILE_APPEND);
                 // todo - fully cancel the user's subscription
 
-                $stripeSubscriptionId = $stripeEvent->data->object->id;
-                $subscription = $this->findSubscription($stripeSubscriptionId);
-                $this->fullyCancelSubscription($subscription);
-
+                $subscriptionId = $stripeEvent->data->object->id;
+                file_put_contents(__DIR__ . 'log.txt','subscriptionId: ' . $subscriptionId . "\n", FILE_APPEND);
+                
+            
+                
+                //$subscription = $this->findSubscription($stripeSubscriptionId);
+                
+                $subscription = $this->getDoctrine()
+            		             ->getRepository('AppBundle:Subscription')
+                                     ->findOneBy([
+                                                'subscriptionId' => $subscriptionId,
+                                            ]);
+                                            
+    		$subscriptionFromTable = $subscription->getSubscriptionId();
+    		file_put_contents(__DIR__ . 'log.txt','subscriptionFromTable: ' . $subscriptionFromTable . "\n", FILE_APPEND);
+                //file_put_contents(__DIR__ . 'log.txt','subscriptionStatus: ' . $stripeEvent->status . "\n", FILE_APPEND);
+                file_put_contents(__DIR__ . 'log.txt','subscriptionStatus: ' . $stripeEvent->data->object->status . "\n", FILE_APPEND);
+                //file_put_contents(__DIR__ . 'log.txt','subscriptionStatus: ' . $stripeEvent->data->status . "\n", FILE_APPEND);
+                //file_put_contents(__DIR__ . 'log.txt','subscriptionStatus: ' . $stripeEvent->items->status . "\n", FILE_APPEND);
+                
+                $subscriptionStatus = $stripeEvent->data->object->status;
+                $this->fullyCancelSubscription($subscription, $subscriptionStatus);
                 break;
 
                 default:
@@ -77,8 +101,9 @@ class WebhookController extends Controller
         return $subscription;
     }
 
-    public function fullyCancelSubscription(Subscription $subscription)
+    public function fullyCancelSubscription(Subscription $subscription, $status)
     {
+	$subscription->setStatus($status);
         $subscription->cancel();
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($subscription);

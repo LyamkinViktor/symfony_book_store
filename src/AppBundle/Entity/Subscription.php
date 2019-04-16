@@ -80,9 +80,8 @@ class Subscription
     private $endsAt;
 
     /**
-     * @var string
      *
-     * @ORM\Column(name="current_period_end", type="string")
+     * @ORM\Column(name="current_period_end", type="string", nullable=true)
      */
     private $currentPeriodEnd;
 
@@ -242,22 +241,17 @@ class Subscription
         $this->createdAt = $createdAt;
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrentPeriodEnd(): string
+
+    public function getCurrentPeriodEnd()
     {
         return $this->currentPeriodEnd;
     }
 
-    /**
-     * @param string $currentPeriodEnd
-     */
-    public function setCurrentPeriodEnd(string $currentPeriodEnd): void
+
+    public function setCurrentPeriodEnd($currentPeriodEnd)
     {
         $this->currentPeriodEnd = $currentPeriodEnd;
     }
-
 
 
     /**
@@ -278,7 +272,7 @@ class Subscription
 
     public function cancel()
     {
-        $this->endsAt = new DateTime();
+        $this->endsAt = time();
         $this->currentPeriodEnd = null;
     }
 

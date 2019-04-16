@@ -1,0 +1,33 @@
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_EtdpDCkiKWRp0I
+subscriptionFromTable: sub_EtdpDCkiKWRp0I
+subscriptionStatus: 
+subscriptionStatus: canceled
+subscriptionStatus: 
+subscriptionStatus: 
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_EtaQYvdzdOHZXp
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_Etdxr74zskUqNc
+subscriptionFromTable: sub_Etdxr74zskUqNc
+subscriptionStatus: canceled
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_Etd4R7NaPsRhFo
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_Etb7WFqmMAOWpy
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_EtbDT7RpZlLaio
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_EtbHbR3XWQFd9J
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_EtbG2rPKt74WXE
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_EtbILpkGFNUivv
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_EteCIKXvvlsvIL
+subscriptionFromTable: sub_EteCIKXvvlsvIL
+subscriptionStatus: canceled
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_Etbdsf152eopW3
+stripeEvent: customer.subscription.deleted
+subscriptionId: sub_Etbi0aAB8GN30n

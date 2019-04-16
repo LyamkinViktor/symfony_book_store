@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityRepository;
 
 
 /**
- * SubscriptionRepository.php
+ * SubscriptionRepository
  */
 class SubscriptionRepository extends EntityRepository
 {
