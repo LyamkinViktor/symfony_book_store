@@ -90,7 +90,7 @@ class Subscription
         try {
             $this->createdAt = new DateTime();
         } catch (Exception $e) {
-
+            echo $e;
         }
 
     }

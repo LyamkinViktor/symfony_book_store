@@ -8,63 +8,69 @@ use AppBundle\Entity\Subscription;
 use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Stripe\Event;
+use Stripe\Stripe;
 use Stripe\StripeObject;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends Controller
 {
     /**
      * @Route("/webhooks/stripe", name="weebhook_stripe")
      * @param Request $request
-     * @return Response
      * @throws Exception
      */
     public function stripeWebhookAction(Request $request)
-    {	
-	//try ->, write catch to log file
-	//Set secret key
-	\Stripe\Stripe::setApiKey($this->getParameter('stripe_secret_key'));
+    {
+        //Set secret key
+	    try{
+            Stripe::setApiKey($this->getParameter('stripe_secret_key'));
+        } catch (Exception $e) {
+            file_put_contents(__DIR__ . 'log.txt',$e->getMessage() . "\n", FILE_APPEND);
+	        throw new Exception($e->getMessage());
+        }
 
+        //Get an associative array of data
         $data = json_decode($request->getContent(), true);
-
         if ($data === null) {
             throw new Exception('Bad JSON body from Stripe!');
         }
-        
+
+        //Get event Id from data
         $eventId = $data['id'];
 	
-	
+	    //Get the stripe event by id
         /** @var Event $stripeEvent */
-        $stripeEvent = \Stripe\Event::retrieve($eventId);
+        $stripeEvent = $this->findEvent($eventId);
 
+
+        //Processing events from stripe
         switch ($stripeEvent->type) {
             case 'customer.subscription.deleted':
-		
-		file_put_contents(__DIR__ . 'log.txt','stripeEvent: ' . $stripeEvent->type . "\n", FILE_APPEND);
-                // todo - fully cancel the user's subscription
+
+                // Fully cancel the user's subscription
+		        file_put_contents(
+		            __DIR__ . 'log.txt',
+                    'stripeEvent: ' . $stripeEvent->type . "\n", FILE_APPEND
+                );
 
                 $subscriptionId = $stripeEvent->data->object->id;
-                file_put_contents(__DIR__ . 'log.txt','subscriptionId: ' . $subscriptionId . "\n", FILE_APPEND);
-                
-            
-                
-                //$subscription = $this->findSubscription($stripeSubscriptionId);
-                
-                $subscription = $this->getDoctrine()
-            		             ->getRepository('AppBundle:Subscription')
-                                     ->findOneBy([
-                                                'subscriptionId' => $subscriptionId,
-                                            ]);
-                                            
-    		$subscriptionFromTable = $subscription->getSubscriptionId();
-    		file_put_contents(__DIR__ . 'log.txt','subscriptionFromTable: ' . $subscriptionFromTable . "\n", FILE_APPEND);
-                //file_put_contents(__DIR__ . 'log.txt','subscriptionStatus: ' . $stripeEvent->status . "\n", FILE_APPEND);
-                file_put_contents(__DIR__ . 'log.txt','subscriptionStatus: ' . $stripeEvent->data->object->status . "\n", FILE_APPEND);
-                //file_put_contents(__DIR__ . 'log.txt','subscriptionStatus: ' . $stripeEvent->data->status . "\n", FILE_APPEND);
-                //file_put_contents(__DIR__ . 'log.txt','subscriptionStatus: ' . $stripeEvent->items->status . "\n", FILE_APPEND);
-                
+                file_put_contents(
+                    __DIR__ . 'log.txt',
+                    'subscriptionId: ' . $subscriptionId . "\n", FILE_APPEND
+                );
+
+                $subscription = $this->findSubscription($subscriptionId);
+
+                //Check subscription from table
+    		    //$subscriptionFromTable = $subscription->getSubscriptionId();
+    		    //file_put_contents(__DIR__ . 'log.txt','subscriptionFromTable: ' . $subscriptionFromTable . "\n", FILE_APPEND);
+
+                file_put_contents(
+                    __DIR__ . 'log.txt',
+                    'subscriptionStatus: ' . $stripeEvent->data->object->status . "\n", FILE_APPEND
+                );
+
                 $subscriptionStatus = $stripeEvent->data->object->status;
                 $this->fullyCancelSubscription($subscription, $subscriptionStatus);
                 break;
@@ -73,7 +79,6 @@ class WebhookController extends Controller
                     throw new Exception('Unexpected webhook from stripe' . $stripeEvent->type);
         }
 
-        return $this->render('@App/webhook/index.html.twig');
     }
 
     /**
@@ -85,25 +90,34 @@ class WebhookController extends Controller
         return Event::retrieve($eventId);
     }
 
-    private function findSubscription($stripeSubscriptionId)
+    /**
+     * @param $subscriptionId
+     * @return Subscription|object|null
+     * @throws Exception
+     */
+    private function findSubscription($subscriptionId)
     {
-        $subscription = $this->getDoctrine()
+        $subscription = $this
+            ->getDoctrine()
             ->getRepository('AppBundle:Subscription')
             ->findOneBy([
-                'subscriptionId' => $stripeSubscriptionId
+                'subscriptionId' => $subscriptionId
             ]);
 
-
         if (!$subscription) {
-            throw new Exception('Somehow we have no subscription id ' . $stripeSubscriptionId);
+            throw new Exception('Somehow we have no subscription id ' . $subscriptionId);
         }
 
         return $subscription;
     }
 
+    /**
+     * @param Subscription $subscription
+     * @param $status
+     */
     public function fullyCancelSubscription(Subscription $subscription, $status)
     {
-	$subscription->setStatus($status);
+	    $subscription->setStatus($status);
         $subscription->cancel();
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($subscription);
