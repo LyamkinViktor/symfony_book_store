@@ -111,9 +111,11 @@ class WebhookController extends Controller
                     'customer: ' . $stripeEvent->data->object->customer . 'Date: ' . date("m.d.y") . "\n",
                     FILE_APPEND
                 );
+
+                // Fix that
                 file_put_contents(
                     __DIR__ . 'log.txt',
-                    'subscription: ' . $stripeEvent->data->object->subscription . 'Date: ' . date("m.d.y") . "\n",
+                    'subscription: ' . $stripeEvent->data->object->plan->subscription . 'Date: ' . date("m.d.y") . "\n",
                     FILE_APPEND
                 );
 
@@ -129,9 +131,9 @@ class WebhookController extends Controller
                     // $mg->messages()->send($domain, $params);
                     $mg->messages()->send('sandbox8cca02d07dc54decbe299296622c4da2.mailgun.org', [
                         'from'    => 'Book store',
-                        'to'      => $stripeEvent->data->object->customer . ' <YOU@YOUR_DOMAIN_NAME>',
+                        'to'      => ' <YOU@YOUR_DOMAIN_NAME>',
                         'subject' => 'Subscription updated!',
-                        'text'    => 'Your subscription ' . $stripeEvent->data->object->subscription . 'update successful.'
+                        'text'    => 'Your subscription update successful.'
                     ]);
                 } catch (Exception $e) {
                     file_put_contents(
