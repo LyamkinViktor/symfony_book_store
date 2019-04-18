@@ -6,10 +6,6 @@
 
 
     <div class="container mt-4">
-        <div class="btn-group" role="group">
-            <a href="{{ path('subscriptions') }}" class="btn btn-secondary">Subscriptions</a>
-            <a href="{{ path('transactions') }}" class="btn btn-primary">Transactions</a>
-        </div>
         <hr>
         <h2>Subscriptions</h2>
         <table class="table table-striped">
@@ -22,6 +18,7 @@
                 <th>Amount</th>
                 <th>Status</th>
                 <th>Date</th>
+                <th>Ends at</th>
             </tr>
             </thead>
             <tbody>
@@ -34,6 +31,7 @@
                     <td>{{ subscription.amount / 100 }} {{ subscription.currency }}</td>
                     <td>{{ subscription.status }}</td>
                     <td>{{ subscription.createdAt|date("d.m.Y") }}</td>
+                    <td>{{ subscription.endsAt }}</td>
                 </tr>
             {% endfor %}
             </tbody>

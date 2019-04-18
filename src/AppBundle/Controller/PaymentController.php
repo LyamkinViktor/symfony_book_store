@@ -86,25 +86,6 @@ class PaymentController extends Controller
         //$currentPeriodEnd = gmdate("Y-m-d | H:i:s", $subscription->current_period_end);
 
 
-        // Instantiate Transaction
-        $transaction = new Transaction();
-
-
-        // Add transaction to Db
-        $transaction->setId($subscription->id);
-        $transaction->setProduct($plan->id);
-        $transaction->setAmount($plan->amount);
-        $transaction->setCurrency($plan->currency);
-        $transaction->setStatus($subscription->status);
-        $transaction->setCustomerId($subscription->customer);
-        $transaction->setCurrentPeriodEnd($subscription->current_period_end);
-        $transaction->setUser($this->getUser());
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($transaction);
-        $entityManager->flush();
-
-
         // Instantiate SubscriptionDb
         $subscriptionDb = new \AppBundle\Entity\Subscription();
 
@@ -152,24 +133,6 @@ class PaymentController extends Controller
         return $this->render('@App/payment/success.html.twig', [
             'tid' => $tid,
             'product' => $product,
-        ]);
-    }
-
-    /**
-     * @Route("payment/transactions", name="transactions")
-     */
-    public function showTransactionsAction()
-    {
-
-        // Get Transaction
-        $transactions = $this
-            ->getDoctrine()
-            ->getRepository('AppBundle:Transaction')
-            ->findAll();
-
-
-        return $this->render('@App/payment/showTransaction.html.twig', [
-            'transactions' => $transactions,
         ]);
     }
 
